@@ -73,3 +73,11 @@
     height: auto;
     padding: 20px;
 }
+.bot{
+    width: 30px;
+    height: 30px;
+    background: black;
+    border-radius: 50%;
+    position: absolute;
+    z-index: 8000;
+}

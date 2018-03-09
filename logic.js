@@ -1,9 +1,26 @@
+      /*********************************** /
+     /*********************************** /         /
+    /*********************************** /
+   /*********************************** /       /
+  /*********************************** /
+ /*********************************** /      /
+/*** DEVELOPED BY EDGAR PACHINSKY ***/
+ /*********************************** /  /
+  /*********************************** /
+   /*********************************** /
+    /*********************************** /
+     /*********************************** /
+     /*********************************** /
+    /*********************************** /
+  /*********************************** /
+/*********************************** /
 /***************** */
 /*** GRAPH TASKS ***/
 /**
- * version v0.3
+ * version v0.4
  */
 /***************** */
+
 
 /*** BASIC VARIABLES ***/
 var graphSelected = false;
@@ -337,7 +354,7 @@ function calcMinimalWay(from, to) {
             }
         }
         $('#calculated-best-way-result').html(way)
-        moveBot(0, 0)
+        moveBot()
     }
 }
 function calculatePeakValues(peaks, wayLength) {
@@ -382,23 +399,52 @@ function dropAllValuesForBasicGraph() {
     peaks = [];
     bestWayArray = []
     wayLength = 0;
+    $drawPlace.find('#bot').remove();
 }
 /*** ---- MODULE FOR BASIC GRAPH END ---- ***/
 
 
 /*** ---- MODULE FOR BOT ---- ***/
-function moveBot(top, left) {
-
-
-    for (i = 0; i < bestWayArray.length; i++) {
+function moveBot() {
+    var arrayCoordinates = [];
+    for (i = bestWayArray.length - 1 ; i >= 0; i--) {
         $('.graph-peak').each(function () {
             if ($(this).data('index') == bestWayArray[i]) {
                 $(this).css({
                     'background': 'yellow'
                 });
+                var top = $(this).position().top
+                var left = $(this).position().left
+                var c = [];
+                c.push(top);c.push(left);
+                arrayCoordinates.push(c)
             }
         })
     }
+
+    var bot = "<div class='bot' id='bot'></div>"
+    $('.bot').css({
+            'display':'block',
+            'background':'red'
+        })
+    $drawPlace.append(bot)
+
+    var index = 0;
+    var animBot = setInterval(function () {
+        if(index == arrayCoordinates.length)clearInterval(animBot)
+
+        animateBot(arrayCoordinates[index][0],arrayCoordinates[index][1])
+        index ++;
+    },500)
+
+
+    console.log(arrayCoordinates)
+}
+function animateBot(top,left) {
+    $('.bot').animate({
+        "top": top + "px",
+        "left": left + "px"
+    },500)
 }
 
 /*** ---- MODULE FOR BOT END ---- ***/
