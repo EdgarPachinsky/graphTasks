@@ -1,0 +1,75 @@
+.selector{
+    padding: 20px;
+}
+.button-block{
+    width: 100%;
+    text-align: center;
+    margin: 0px 0px 20px 0px;
+}
+.drawing-canvas{
+    position: relative;
+    width: 100%;
+    height: 500px;
+    background: #ccc;
+}
+
+
+.graph-peak{
+    position: absolute;
+    z-index: 10;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-weight: bold;
+    border: 1px solid red;
+    text-align: center;
+    background: whitesmoke;
+    box-shadow: 0px 0px 10px black;
+}
+.graph-peak:hover{
+    cursor: pointer;
+}
+.graph-peak-delete{
+    position: absolute;
+    top: -17px;
+    left: 16px;
+    font-size: 20px;
+    width: 50px;
+    display: none;
+    padding: 0;
+    font-weight: bold;
+    border: 1px solid black;
+    border-radius: 5px;
+    line-height: 23px;
+}
+
+.graph-peak:hover > .graph-peak-delete{
+    display: block;
+}
+.block-of-graph-matrix{
+    padding: 10px;
+    width: auto;
+    height: auto;
+}
+
+.baseLine{
+    position: absolute;
+    height: 1px;
+    background: red;
+}
+
+.lineStartPoint{
+    width: 1px;
+    height: 1px;
+    background: red;
+    border-radius: 1px;
+    position: absolute;
+}
+.block-results-inner{
+    float: left;
+}
+.calculated-best-way-result{
+    width: 100%;
+    height: auto;
+    padding: 20px;
+}
