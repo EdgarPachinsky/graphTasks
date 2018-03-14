@@ -9,7 +9,7 @@
 .drawing-canvas{
     position: relative;
     width: 100%;
-    height: 500px;
+    height: 700px;
     background: #ccc;
 }
 
@@ -80,4 +80,8 @@
     border-radius: 50%;
     position: absolute;
     z-index: 8000;
+}
+.way-value-input-block{
+    width: 100%;
+    height: 100%;
 }

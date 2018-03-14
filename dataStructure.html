@@ -14,8 +14,8 @@
     <div class="graph-selector-block">
         <div class="selector">
             <select name="" id="graph-type" class="graph-type-selector form-control">
-                <option value="0">Քաշ ունեցող</option>
-                <option value="1">Ուղղությամբ</option>
+                <option value="0">Ուղղությամբ</option>
+                <option value="1">Առանց Ուղղության, Քաշ ունեցող</option>
                 <option value="2">Առանց Ուղղության, Առանց Քաշի</option>
             </select>
         </div>
@@ -30,7 +30,13 @@
         </div>
     </div>
 
-    <div class="drawing-canvas" id="drawing-canvas"></div>
+    <div class="drawing-canvas" id="drawing-canvas">
+
+        <div class="way-value-input-block">
+            <input type="number" id="wayValue">
+            <button class="btn btn-danger" onclick="module2TakeValueOfWay(true)">OK</button>
+        </div>
+    </div>
 
 
     <div class="task1-block">
@@ -42,12 +48,13 @@
             <input type="text" id="to">
             <button id="calculateMinimalWay" class="btn">Calc</button>
         </div>
-        <div class="calculated-best-way-result" id="calculated-best-way-result"></div>
+        <div class="calculated-best-way-result" id="calculated-best-way-result">
+        </div>
 
     </div>
 
     <div class="block-results-inner">
-        <div class="block-of-graph-matrix" id="block-of-graph-matrix" style="display: none"></div>
+        <div class="block-of-graph-matrix" id="block-of-graph-matrix" style="display: block"></div>
     </div>
 
 </div>

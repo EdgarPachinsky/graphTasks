@@ -1,23 +1,23 @@
-      /*********************************** /
-     /*********************************** /         /
-    /*********************************** /
-   /*********************************** /       /
-  /*********************************** /
- /*********************************** /      /
-/*** DEVELOPED BY EDGAR PACHINSKY ***/
- /*********************************** /  /
-  /*********************************** /
-   /*********************************** /
-    /*********************************** /
-     /*********************************** /
-     /*********************************** /
-    /*********************************** /
-  /*********************************** /
 /*********************************** /
-/***************** */
+ /*********************************** /         /
+ /*********************************** /
+ /*********************************** /       /
+ /*********************************** /
+ /*********************************** /      /
+ /*** DEVELOPED BY EDGAR PACHINSKY ***/
+/*********************************** /  /
+ /*********************************** /
+ /*********************************** /
+ /*********************************** /
+ /*********************************** /
+ /*********************************** /
+ /*********************************** /
+ /*********************************** /
+ /*********************************** /
+ /***************** */
 /*** GRAPH TASKS ***/
 /**
- * version v0.4
+ * version v0.5
  */
 /***************** */
 
@@ -40,6 +40,9 @@ var midY = 0;
 var lineRotateInRadian = 0;
 var lineRotateInDegree = 0;
 var lineWidth = 0;
+var fromPeak = null;
+var toPeak = null;
+var fst = true;
 /*** LINE DRAWING VARS END ***/
 
 /*** GRAPH TYPE ***/
@@ -86,10 +89,7 @@ function generateGraphMatrix(peakCount) {
     }
 }
 function transformGraphMatrix(from, to, value) {
-    if (graphType == 1) {
-        graphMatrix[from][to] = value;
-    }
-    if (graphType == 2) {
+    if (graphType == 1 || graphType == 2) {
         graphMatrix[from][to] = value;
         graphMatrix[to][from] = value;
     }
@@ -133,11 +133,22 @@ $(document).ready(function () {
 
     /*** SECOND STEP DRAW LINES ***/
     $secondStep.click(function () {
+        fromPeak = null;
+        toPeak = null;
+        fst = true;
+
+
+        if (graphType == 1) {
+            /*** CALLING MODULE 2 FUNCTIONS ***/
+            $drawPlace.unbind("click");
+            unbindDeleteFunctionFromPeaksModule2()
+        }
+
+
         if (graphType == 2) {
             /*** CALLING MODULE 2 FUNCTIONS ***/
             $drawPlace.unbind("click");
             unbindDeleteFunctionFromPeaks()
-
         }
     })
     $drawPlace.mousemove(function (e) {
@@ -157,9 +168,7 @@ $(document).ready(function () {
         })
         calcMinimalWay(from - 1, to - 1)
     })
-
 })
-
 
 /*** FUNCTIONS ***/
 
@@ -212,18 +221,119 @@ function drawResultMatrix(counter) {
 /*** DRAW IN DIV RESULT MATRIX END ***/
 
 
-
 /*** ---- MODULE FOR NON DIRECTIONAL GRAPH ---- ***/
 
 /*** ---- MODULE FOR NON DIRECTIONAL GRAPH END ---- ***/
 
 
+/****************************************************** */
+/****************************************************** */
+/****************************************************** */
+/****************************************************** */
+/****************************************************** */
+/****************************************************** */
+/****************************************************** */
+/****************************************************** */
+/****************************************************** */
+
+/*** ---- MODULE FOR NON DIRECTIONAL GRAPH WITH VALUES---- ***/
+function unbindDeleteFunctionFromPeaksModule2() {
+    $('.graph-peak').each(function () {
+        $(this).find('delete').remove()
+        $(this).attr('onclick', "startLineModule2(this)");
+    })
+}
+function startLineModule2(domObj) {
+
+    if (fst == true) {
+        fromPeak = $(domObj).attr('data-index')
+        oldX = x;
+        oldY = y;
+        fst = false;
+    }
+    else {
+        newX = x;
+        newY = y;
+        toPeak = $(domObj).attr('data-index')
+
+        module2TakeValueOfWay(false)
+    }
+}
+function module2TakeValueOfWay(taken) {
+    if(taken == false){
+        $('.way-value-input-block').css({
+            'display':'block'
+        })
+        $('.way-value-input-block').focus();
+    }else{
+
+        var peakVal =  $('.way-value-input-block').find('input').val();
+
+        transformGraphMatrix(fromPeak - 1, toPeak - 1, peakVal);
+        drawResultMatrix(peakDataIndex - 1);
+        drawLineModule2(oldX, newX, oldY, newY,peakVal);
+        fst = true
+
+        $('.way-value-input-block').css({
+            'display':'none'
+        })
+    }
+}
+function drawLineModule2(oldX, newX, oldY, newY,val) {
+    if (newX >= oldX) {
+        widthX = newX - oldX;
+    } else {
+        widthX = oldX - newX;
+    }
+    if (newY >= oldY) {
+        widthY = newY - oldY;
+    } else {
+        widthY = oldY - newY;
+    }
+    lineWidth = ~~(Math.sqrt((widthX * widthX) + (widthY * widthY)));
+    lineRotateInRadian = Math.atan2(oldY - newY, oldX - newX);
+    lineRotateInDegree = (lineRotateInRadian * 180) / Math.PI;
+    midX = ( newX + oldX ) / 2;
+    midY = ( newY + oldY ) / 2;
+    $drawPlace.append('<span style="position: absolute;top: '+ (midY-30) +'px; left: '+ (midX-10) +'px">'+val+'</span>')
+    var lineLeft = midX - (lineWidth / 2);
+    $drawPlace.append("<div class = 'baseLine' style='width:" + lineWidth + "px;top:" + midY + "px;left:" + lineLeft + "px;transform:rotate(" + lineRotateInDegree + "deg)'></div>");
+
+}
 
 
-/*** ---- MODULE FOR NON DIRECTIONAL GRAPH ---- ***/
+/**
+ * This will hold visited peaks of graph
+ * @type {Array}
+ */
+var visitedPeaks = [];
+var plusInfinity = Number.POSITIVE_INFINITY;
 
-/*** ---- MODULE FOR NON DIRECTIONAL GRAPH END ---- ***/
 
+/**
+ * Parameter TO , to go back to FROM
+ * @param to
+ */
+function calculateBestWayWithValues(to) {
+    var currentValue = peakValues[to];
+    for (j = 0; j < graphMatrix[0].length; j++) {
+        if (graphMatrix[to][j] != 0 && peakValues[j] <= currentValue && visitedPeaks[j] != 'visited' ) {
+            return j;
+        }
+    }
+}
+
+/*** ---- MODULE FOR NON DIRECTIONAL GRAPH WITH VALUES END ---- ***/
+
+/****************************************************** */
+/****************************************************** */
+/****************************************************** */
+/****************************************************** */
+/****************************************************** */
+/****************************************************** */
+/****************************************************** */
+/****************************************************** */
+/****************************************************** */
 
 /*** ---- MODULE FOR BASIC GRAPH ---- ***/
 function unbindDeleteFunctionFromPeaks() {
@@ -232,11 +342,6 @@ function unbindDeleteFunctionFromPeaks() {
         $(this).attr('onclick', "startLine(this)");
     })
 }
-
-var fromPeak = null;
-var toPeak = null;
-var fst = true;
-
 function startLine(domObj) {
 
     if (fst == true) {
@@ -255,7 +360,6 @@ function startLine(domObj) {
         fst = true
     }
 }
-
 function drawLine(oldX, newX, oldY, newY) {
     if (newX >= oldX) {
         widthX = newX - oldX;
@@ -277,7 +381,6 @@ function drawLine(oldX, newX, oldY, newY) {
     $drawPlace.append("<div class = 'baseLine' style='width:" + lineWidth + "px;top:" + midY + "px;left:" + lineLeft + "px;transform:rotate(" + lineRotateInDegree + "deg)'></div>");
 
 }
-
 
 /**
  * Array for peak values in graph
@@ -333,18 +436,56 @@ function calcMinimalWay(from, to) {
         }
         console.log(peakValues)
 
+
         /**
          * Second part of algorithm is to find best way to given point
+         *
+         * first part is similar for graphs with types of 1 and 2
+         *
+         * so second part is different but simple if will solve this issue
+         *
+         *
          */
-        bestWayArray.push(to + 1)
-        while (true) {
-            to = calculateBestWay(to);
+
+        if(graphType == 1) {
+            /**
+             * initialize visited peaks with infinity
+             */
+            for (i = 0 ; i < peakValues.length ; i++){
+                visitedPeaks[i] = plusInfinity;
+            }
+            console.log(visitedPeaks);
+
+            /**
+             * find best way for type 1
+             */
             bestWayArray.push(to + 1)
-            if (peakValues[to] == 0) {
-                break;
+            visitedPeaks[to] = 'visited';
+            while (true) {
+
+                to = calculateBestWayWithValues(to);
+                console.log(to)
+                visitedPeaks[to] = 'visited';
+                bestWayArray.push(to + 1)
+                if (peakValues[to] == 0) {
+                    break;
+                }
             }
         }
 
+        if(graphType == 2) {
+            /**
+             * find best way for type 2
+             */
+            bestWayArray.push(to + 1)
+            while (true) {
+                to = calculateBestWay(to);
+                bestWayArray.push(to + 1)
+                if (peakValues[to] == 0) {
+                    break;
+                }
+            }
+        }
         var way = "";
         for (i = bestWayArray.length - 1; i >= 0; i--) {
             if (i == 0) {
@@ -368,18 +509,21 @@ function calculatePeakValues(peaks, wayLength) {
 
         for (j = 0; j < graphMatrix[0].length; j++) {
 
-            if (graphMatrix[peaks[i]][j] == 1) {
+            if (graphMatrix[peaks[i]][j] != 0) {
 
                 if (peakValues[j] == -1) {
+
                     buffer.push(j)
-                    peakValues[j] = wayLength
+                    if(graphType == 1)
+                    peakValues[j] = parseInt(graphMatrix[peaks[i]][j])
+                    if(graphType == 2)
+                    peakValues[j] = parseInt(wayLength)
                 }
             }
         }
     }
     return buffer;
 }
-
 /**
  * Parameter TO , to go back to FROM
  * @param to
@@ -388,12 +532,11 @@ function calculateBestWay(to) {
 
     var currentValue = peakValues[to];
     for (j = 0; j < graphMatrix[0].length; j++) {
-        if (graphMatrix[to][j] == 1 && peakValues[j] == currentValue - 1) {
+        if (graphMatrix[to][j] != 0 && peakValues[j] == currentValue - 1) {
             return j;
         }
     }
 }
-
 function dropAllValuesForBasicGraph() {
     peakValues = [];
     peaks = [];
@@ -402,12 +545,20 @@ function dropAllValuesForBasicGraph() {
     $drawPlace.find('#bot').remove();
 }
 /*** ---- MODULE FOR BASIC GRAPH END ---- ***/
+/****************************************************** */
+/****************************************************** */
+/****************************************************** */
+/****************************************************** */
+/****************************************************** */
+/****************************************************** */
+/****************************************************** */
+/****************************************************** */
 
 
 /*** ---- MODULE FOR BOT ---- ***/
 function moveBot() {
     var arrayCoordinates = [];
-    for (i = bestWayArray.length - 1 ; i >= 0; i--) {
+    for (i = bestWayArray.length - 1; i >= 0; i--) {
         $('.graph-peak').each(function () {
             if ($(this).data('index') == bestWayArray[i]) {
                 $(this).css({
@@ -416,7 +567,8 @@ function moveBot() {
                 var top = $(this).position().top
                 var left = $(this).position().left
                 var c = [];
-                c.push(top);c.push(left);
+                c.push(top);
+                c.push(left);
                 arrayCoordinates.push(c)
             }
         })
@@ -424,30 +576,28 @@ function moveBot() {
 
     var bot = "<div class='bot' id='bot'></div>"
     $('.bot').css({
-            'display':'block',
-            'background':'red'
-        })
+        'display': 'block',
+        'background': 'red'
+    })
     $drawPlace.append(bot)
 
     var index = 0;
     var animBot = setInterval(function () {
-        if(index == arrayCoordinates.length)clearInterval(animBot)
+        if (index == arrayCoordinates.length) clearInterval(animBot)
 
-        animateBot(arrayCoordinates[index][0],arrayCoordinates[index][1])
-        index ++;
-    },500)
+        animateBot(arrayCoordinates[index][0], arrayCoordinates[index][1])
+        index++;
+    }, 500)
 
 
     console.log(arrayCoordinates)
 }
-function animateBot(top,left) {
+function animateBot(top, left) {
     $('.bot').animate({
         "top": top + "px",
         "left": left + "px"
-    },500)
+    }, 500)
 }
-
 /*** ---- MODULE FOR BOT END ---- ***/
-
 
 /*** FUNCTIONS END ***/
