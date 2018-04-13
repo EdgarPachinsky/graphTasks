@@ -3,20 +3,18 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="bootstrap.css">
     <title>
-        Graph Algorithms
+        Algorithms
     </title>
 </head>
 <body>
 
 <div class="graph-draw-place">
-
-
     <div class="graph-selector-block">
         <div class="selector">
             <select name="" id="graph-type" class="graph-type-selector form-control">
-                <option value="0">Ուղղությամբ</option>
-                <option value="1">Առանց Ուղղության, Քաշ ունեցող</option>
-                <option value="2">Առանց Ուղղության, Առանց Քաշի</option>
+                <option value="0">Դատա Մայնինգ (Apriori Algorithm)</option>
+                <option value="1">Առանց Ուղղության Գրաֆ , Քաշ ունեցող (Dijkstra Algorithm)</option>
+                <option value="2">Առանց Ուղղության Գրաֆ , Առանց Քաշի  (Wave Algorithm)</option>
             </select>
         </div>
         <div class="button-block">
@@ -30,15 +28,13 @@
         </div>
     </div>
 
-    <div class="drawing-canvas" id="drawing-canvas">
 
+    <div class="drawing-canvas" id="drawing-canvas">
         <div class="way-value-input-block">
             <input type="number" id="wayValue">
             <button class="btn btn-danger" onclick="module2TakeValueOfWay(true)">OK</button>
         </div>
     </div>
-
-
     <div class="task1-block">
         <span>Ամենակարճ ճանապարհը A-ից B</span>
         <div>
@@ -52,16 +48,28 @@
         </div>
 
     </div>
-
     <div class="block-results-inner">
         <div class="block-of-graph-matrix" id="block-of-graph-matrix" style="display: block"></div>
     </div>
+</div>
 
+
+<div class="apriori-algorithm-place">
+    <h2 class="card-header">Apriori Algorithm</h2>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="apriori-products-inner">
+
+            </div>
+        </div>
+    </div>
 </div>
 
 
 <script src="jquery.js"></script>
 <script src="bootstrap.js"></script>
-<script src="logic.js"></script>
+<script src="graphs.js"></script>
+<script src="apriori.js"></script>
 </body>
 </html>

@@ -6,14 +6,14 @@
  /*********************************** /      /
  /*** DEVELOPED BY EDGAR PACHINSKY ***/
 /*********************************** /  /
- /*********************************** /
- /*********************************** /
- /*********************************** /
- /*********************************** /
- /*********************************** /
- /*********************************** /
- /*********************************** /
- /*********************************** /
+     /*********************************** /
+         /*********************************** /
+             /*********************************** /
+                 /*********************************** /
+                    /*********************************** /
+                 /*********************************** /
+         /*********************************** /
+     /*********************************** /
  /***************** */
 /*** GRAPH TASKS ***/
 /**
@@ -179,7 +179,6 @@ function createGraphPeak(x, y, dataIndex) {
         '<delete class="graph-peak-delete" onclick="deleteGraphPeak(this)">x</delete>' +
         '</div>';
 }
-
 function deleteGraphPeak(domObj) {
     $(domObj).parent().remove();
     /*** USED TO COUNT PEAKS OF GRAPH***/
@@ -260,26 +259,26 @@ function startLineModule2(domObj) {
     }
 }
 function module2TakeValueOfWay(taken) {
-    if(taken == false){
+    if (taken == false) {
         $('.way-value-input-block').css({
-            'display':'block'
+            'display': 'block'
         })
         $('.way-value-input-block').focus();
-    }else{
+    } else {
 
-        var peakVal =  $('.way-value-input-block').find('input').val();
+        var peakVal = $('.way-value-input-block').find('input').val();
 
         transformGraphMatrix(fromPeak - 1, toPeak - 1, peakVal);
         drawResultMatrix(peakDataIndex - 1);
-        drawLineModule2(oldX, newX, oldY, newY,peakVal);
+        drawLineModule2(oldX, newX, oldY, newY, peakVal);
         fst = true
 
         $('.way-value-input-block').css({
-            'display':'none'
+            'display': 'none'
         })
     }
 }
-function drawLineModule2(oldX, newX, oldY, newY,val) {
+function drawLineModule2(oldX, newX, oldY, newY, val) {
     if (newX >= oldX) {
         widthX = newX - oldX;
     } else {
@@ -295,7 +294,7 @@ function drawLineModule2(oldX, newX, oldY, newY,val) {
     lineRotateInDegree = (lineRotateInRadian * 180) / Math.PI;
     midX = ( newX + oldX ) / 2;
     midY = ( newY + oldY ) / 2;
-    $drawPlace.append('<span style="position: absolute;top: '+ (midY-30) +'px; left: '+ (midX-10) +'px">'+val+'</span>')
+    $drawPlace.append('<span style="position: absolute;top: ' + (midY - 30) + 'px; left: ' + (midX - 10) + 'px">' + val + '</span>')
     var lineLeft = midX - (lineWidth / 2);
     $drawPlace.append("<div class = 'baseLine' style='width:" + lineWidth + "px;top:" + midY + "px;left:" + lineLeft + "px;transform:rotate(" + lineRotateInDegree + "deg)'></div>");
 
@@ -307,21 +306,103 @@ function drawLineModule2(oldX, newX, oldY, newY,val) {
  * @type {Array}
  */
 var visitedPeaks = [];
-var plusInfinity = Number.POSITIVE_INFINITY;
-
+/**
+ * will hold best way to any peak
+ * @type {Array}
+ */
+var bestWaysToPeaks = [];
 
 /**
- * Parameter TO , to go back to FROM
- * @param to
+ * will hold lengths of ways to add in iterations
+ * @type {number}
  */
-function calculateBestWayWithValues(to) {
-    var currentValue = peakValues[to];
-    for (j = 0; j < graphMatrix[0].length; j++) {
-        if (graphMatrix[to][j] != 0 && peakValues[j] <= currentValue && visitedPeaks[j] != 'visited' ) {
+var constVal = 0;
+
+var buffer = [];
+
+var plusInfinity = Number.POSITIVE_INFINITY;
+function calculateBestWayWithValues(from) {
+    var len = graphMatrix[0].length;
+    for (i = 0; i < len; i++) {
+        bestWaysToPeaks[i] = plusInfinity;
+        visitedPeaks[i] = 0;
+    }
+    visitedPeaks[from] = 1;
+    bestWaysToPeaks[from] = 0;
+    constVal = 0;
+    var returning = null;
+    var found = false;
+    var returningValues = [];
+    while (found == false) {
+        returningValues = calculate(from, bestWaysToPeaks, len);
+        from = returningValues[0];
+        bestWaysToPeaks = returningValues[1];
+        visitedPeaks[from] = 1;
+
+        if (from == len - 1)break;
+
+    }
+    return bestWaysToPeaks;
+}
+function calculate(index, bestWaysToPeaks, len) {
+    var returnVal = [];
+    returnVal[0] = null;
+    returnVal[1] = null;
+    for (j = 0; j < len; j++) {
+        var t1 = parseInt(constVal) + parseInt(graphMatrix[index][j]);
+        if (graphMatrix[index][j] != 0 && j != index && visitedPeaks[j] == 0 && t1 < bestWaysToPeaks[j]) {
+            var t = parseInt(constVal) + parseInt(graphMatrix[index][j]);
+            if (t < bestWaysToPeaks[j]) {
+                bestWaysToPeaks[j] = parseInt(graphMatrix[index][j]) + parseInt(constVal);
+            }
+        }
+    }
+    var minLen = null;
+    var indexToRetun = null;
+    for (i = 0; i < len; i++) {
+        if (i != index && visitedPeaks[i] == 0 && bestWaysToPeaks[i] < plusInfinity && bestWaysToPeaks[i] > 0) {
+            minLen = bestWaysToPeaks[i];
+            indexToRetun = i;
+            break;
+        }
+    }
+    for (i = 0; i < len; i++) {
+        if (i != index && bestWaysToPeaks[i] < minLen && visitedPeaks[i] == 0) {
+            minLen = bestWaysToPeaks[i];
+            indexToRetun = i;
+        }
+    }
+    returnVal[0] = indexToRetun;
+    returnVal[1] = bestWaysToPeaks;
+    constVal = bestWaysToPeaks[indexToRetun];
+    visitedPeaks[indexToRetun] = 1;
+    return returnVal;
+}
+
+var normalWay = [];
+function calcualteMainShortWay(from, to, arrayOfBestWays) {
+    var h = to;
+    normalWay.push(h+1)
+    while (true) {
+        h = helper(h, arrayOfBestWays);
+        normalWay.push(h+1)
+        if (h == from)break;
+    }
+    return normalWay;
+}
+function helper(to, arrayOfBestWays) {
+
+    var len = arrayOfBestWays.length
+
+    for (j = 0; j < len; j++) {
+        var k = arrayOfBestWays[to] - graphMatrix[to][j]
+        if (k == arrayOfBestWays[j] && j!= to) {
             return j;
         }
     }
+
 }
+
 
 /*** ---- MODULE FOR NON DIRECTIONAL GRAPH WITH VALUES END ---- ***/
 
@@ -434,7 +515,6 @@ function calcMinimalWay(from, to) {
             }
             if (negativeVal == false)break;
         }
-        console.log(peakValues)
 
 
         /**
@@ -447,33 +527,19 @@ function calcMinimalWay(from, to) {
          *
          */
 
-        if(graphType == 1) {
-            /**
-             * initialize visited peaks with infinity
-             */
-            for (i = 0 ; i < peakValues.length ; i++){
-                visitedPeaks[i] = plusInfinity;
-            }
-            console.log(visitedPeaks);
-
-            /**
-             * find best way for type 1
-             */
-            bestWayArray.push(to + 1)
-            visitedPeaks[to] = 'visited';
-            while (true) {
-
-                to = calculateBestWayWithValues(to);
-                console.log(to)
-                visitedPeaks[to] = 'visited';
-                bestWayArray.push(to + 1)
-                if (peakValues[to] == 0) {
-                    break;
-                }
-            }
+        if (graphType == 1) {
+            visitedPeaks = [];
+            bestWaysToPeaks = [];
+            constVal = 0;
+            normalWay = [];
+            buffer = [];
+            var type1From = $('#from').val()
+            var type1To = $('#to').val()
+            buffer = calculateBestWayWithValues(type1From - 1);
+            bestWayArray = calcualteMainShortWay(type1From - 1, type1To - 1, buffer);
         }
 
-        if(graphType == 2) {
+        if (graphType == 2) {
             /**
              * find best way for type 2
              */
@@ -514,10 +580,10 @@ function calculatePeakValues(peaks, wayLength) {
                 if (peakValues[j] == -1) {
 
                     buffer.push(j)
-                    if(graphType == 1)
-                    peakValues[j] = parseInt(graphMatrix[peaks[i]][j])
-                    if(graphType == 2)
-                    peakValues[j] = parseInt(wayLength)
+                    if (graphType == 1)
+                        peakValues[j] = parseInt(graphMatrix[peaks[i]][j])
+                    if (graphType == 2)
+                        peakValues[j] = parseInt(wayLength)
                 }
             }
         }
