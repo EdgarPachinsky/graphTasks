@@ -102,9 +102,25 @@ $minimalWayCalc = $('#calculateMinimalWay');
 
 
 $(document).ready(function () {
+    //hide apriori block
+    $('.apriori-algorithm-place').css({'display':'none'})
+
     $('#graphSelected').click(function () {
         graphType = $('#graph-type').val()
-        graphSelected = true;
+
+        if(graphType == 0){
+            //apriori selected
+            $drawPlace.css({'display':'none'})
+            $('.task1-block').css({'display':'none'})
+            $('.block-results-inner').css({'display':'none'})
+            $('.apriori-algorithm-place').css({'display':'block'})
+        }else{
+            graphSelected = true;
+            $drawPlace.css({'display':'block'})
+            $('.task1-block').css({'display':'block'})
+            $('.block-results-inner').css({'display':'block'})
+            $('.apriori-algorithm-place').css({'display':'none'})
+        }
     })
 
     /*** DRAWING PEAKS OF GRAPH ***/

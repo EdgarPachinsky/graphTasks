@@ -46,7 +46,6 @@
         </div>
         <div class="calculated-best-way-result" id="calculated-best-way-result">
         </div>
-
     </div>
     <div class="block-results-inner">
         <div class="block-of-graph-matrix" id="block-of-graph-matrix" style="display: block"></div>
@@ -55,19 +54,114 @@
 
 
 <div class="apriori-algorithm-place">
-    <h2 class="card-header">Apriori Algorithm</h2>
 
-    <div class="row">
-        <div class="col-md-3">
-            <div class="apriori-products-inner">
+    <div class="container">
+        <h2 class="card-header">Apriori Algorithm</h2>
 
+        <div class="row" style="margin-top: 10px">
+            <div class="col-md-3">
+                <div class="apriori-products-inner">
+                    <h5>Products</h5>
+                    <div class="products-inner">
+                        <ul class="products-list">
+
+                        </ul>
+                    </div>
+
+                    <div class="append-product">
+                        +
+                    </div>
+                </div>
+                <div class="threshold">
+                <p class="treshold-text"><i>Support THRESHOLD</i></p><input class="treshold-input" type="text" placeholder="..%">
+                </div>
+
+                <div class="threshold">
+                    <p class="treshold-text"><i>Minimum CONFIDENCE</i></p><input class="confidence-input" type="text" placeholder="..%">
+                </div>
+
+                <div class="threshold">
+                    <button class="btn btn-dark calculate-rules" onclick="calculateMinimumTHRESHOLD()" style="width: 100%"><i><b>CALCULATE RULES</b></i></button>
+                </div>
+            </div>
+
+            <div class="col-md-9">
+                <div class="apriori-products-db">
+                    <h5>Create Transactions For DB</h5>
+
+                    <div class="apriori-transaction-place">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr class="apriori-db-header">
+                                    <th id="start">Transaction Id #</th>
+                                </tr>
+                            </thead>
+
+                            <tbody class="transaction-lines">
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="append-transaction">
+                        +
+                    </div>
+                </div>
             </div>
         </div>
+
+            <div class="row">
+
+                <div class="col-md-12" style="margin: 30px 0px">
+                    <div class="heading">
+                        <h3 class="card-header">Algorithm Result Rules</h3>
+                    </div>
+
+                    <div class="apriori-result">
+                        <div class="minimum-frequency">
+                            <b><i>Minimum Frequency Of Product -</i> <span></span></b>
+                        </div>
+
+                        <div class="results-table">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="apriori-products-inner">
+                                        <table class="table table-striped">
+                                            <thead>
+                                            <tr class="">
+                                                <th>Product</th>
+                                                <th>Frequency</th>
+                                            </tr>
+                                            </thead>
+
+                                            <tbody class="product-frequency">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-9">
+                                    <div class="most-frequent-set">
+                                        <i>
+                                            <h5 style="font-weight: 400">
+
+                                            </h5>
+                                        </i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
     </div>
 </div>
 
 
 <script src="jquery.js"></script>
+<script src="underscore.js"></script>
 <script src="bootstrap.js"></script>
 <script src="graphs.js"></script>
 <script src="apriori.js"></script>

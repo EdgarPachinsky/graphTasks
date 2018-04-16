@@ -1,3 +1,12 @@
+ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+ul li{
+    padding: 5px;
+}
+
 .selector{
     padding: 20px;
 }
@@ -84,4 +93,137 @@
 .way-value-input-block{
     width: 100%;
     height: 100%;
+}
+
+
+.apriori-products-inner{
+    position: relative;
+    width: 100%;
+    padding: 5px;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.apriori-products-db{
+    position: relative;
+    width: 100%;
+    padding: 5px;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+
+.append-product:hover{
+    cursor: pointer;
+}
+.append-product{
+    position: absolute;
+    bottom: -13px;
+    height: auto;
+    border: 1px solid black;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 29px;
+    padding-left: 1px;
+    color: green;
+    background: #ccc;
+    line-height: 20px;
+    width: 28px;
+    padding-bottom: 7px;
+    left: 50%;
+    margin-left: -21px;
+}
+
+.append-transaction:hover{
+    cursor: pointer;
+}
+.append-transaction{
+    position: absolute;
+    bottom: -13px;
+    height: auto;
+    border: 1px solid black;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 29px;
+    padding-left: 1px;
+    color: green;
+    background: #ccc;
+    line-height: 20px;
+    width: 28px;
+    padding-bottom: 7px;
+    left: 50%;
+    margin-left: -21px;
+}
+
+.delete-product:hover{cursor: pointer}
+.delete-product{
+    color: red;
+}
+.approve-product:hover{
+    cursor: pointer;
+}
+.approved-product{
+    font-weight: bold;
+    border: 1px solid black;
+    color: black;
+    padding: 3px;
+}
+.appended-transaction-line{
+    position: relative;
+}
+
+.transaction-deleter:hover{
+    cursor: pointer
+}
+.transaction-deleter{
+    height: auto;
+    border: 1px solid black;
+    text-align: center;
+    font-size: 16px;
+    color: red;
+    background: #ccc;
+    line-height: 20px;
+    width: auto;
+    padding: 0px 3px;
+    font-weight: bold;
+    border-radius: 5px;
+}
+.threshold{
+    display: flex;
+    margin-top: 20px;
+    height: 67px;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+.treshold-text{
+    width: auto;
+    float: left;
+    margin-bottom: 0 !important;
+    font-weight: bold;
+}
+.treshold-input{
+    width: 80px;
+    margin-left: 25px;
+    border-radius: 5px;
+    border: 1px solid black;
+    padding: 12px;
+}
+
+.confidence-input{
+    width: 80px;
+    margin-left: 25px;
+    border-radius: 5px;
+    border: 1px solid black;
+    padding: 12px;
+}
+
+.good-freq{
+    color: green;
+}
+.bad-freq{
+    color: red;
+}
+.inner-row{
+    margin: 30px 0px;
 }
